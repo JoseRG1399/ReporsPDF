@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 String firma = txtFirma.getText().toString();
                 if (!firma.isEmpty()) {
                     obtenerNombreVendedora(firma);
-                    Toast.makeText(getApplicationContext(), "Tu firma es: "+ firma, Toast.LENGTH_SHORT).show();
+
 
                 } else {
                     // El campo está vacío, puedes mostrar un mensaje al usuario o realizar otra acción
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-        private void CreatePDF(){
+        private void CreatePDF(String tienda, String aparato, String descripcion, String firma){
             PdfDocument document = new PdfDocument();
             PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(2480, 3508, 1).create();
             PdfDocument.Page page = document.startPage(pageInfo);
@@ -143,27 +143,28 @@ public class MainActivity extends AppCompatActivity {
             float bodyY = titleY + paint.getFontSpacing() + 80; // Alineado debajo del subtítulo y con espacio adicional
 
 // Texto: Sucursal
-            String sucursal = "Sucursal: Nombre de la sucursal";
+            String sucursal = "Sucursal: " + tienda;
             canvas.drawText(sucursal, bodyX, bodyY, paint);
             bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
 
-// Texto: Encargada de ventas
-            String encargadaVentas = "Encargada de ventas: Nombre de la persona";
-            canvas.drawText(encargadaVentas, bodyX, bodyY, paint);
-            bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
 
 // Texto: Equipo
-            String equipo = "Equipo: Nombre del equipo";
+            String equipo = "Equipo: " + aparato;
             canvas.drawText(equipo, bodyX, bodyY, paint);
             bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
 
 // Texto: Comentarios del mantenimiento
-            String comentariosMantenimiento = "Comentarios del mantenimiento: ";
+            String comentariosMantenimiento = "Descripcion del mantenimiento realizado:";
             canvas.drawText(comentariosMantenimiento, bodyX, bodyY, paint);
             bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
 
+ //Comentario con salto de linea
+            String textolargo = descripcion;
+            canvas.drawText(textolargo, bodyX, bodyY, paint);
+            bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
+
 // Texto: Firma electrónica
-            String firmaElectronica = "Firma electrónica: ";
+            String firmaElectronica = "Firma electronica de: " + firma;
             canvas.drawText(firmaElectronica, bodyX, bodyY, paint);
             bodyY += paint.getFontSpacing() + 50 ; // Añadir espacio entre líneas
 
@@ -180,23 +181,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
             document.finishPage(page);
 
 
             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-            String fileName = "Example_" + timeStamp + ".pdf";
+            String fileName = "ReporteMantenimiento"+ timeStamp + ".pdf";
             File file = new File(downloadsDir,fileName);
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 document.writeTo(fos);
                 document.close();
                 fos.close();
-                Toast.makeText(this, "written Successfuly!!!!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Reporte generado con exito",Toast.LENGTH_SHORT).show();
 
             } catch (FileNotFoundException e) {
                 Log.d("mylog","Error while writing"+ e.toString());
@@ -205,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
 
-
+            LimpiarFormulario();
         }
 
     private void setupSpinnerBasic() {
@@ -314,43 +311,57 @@ public class MainActivity extends AppCompatActivity {
         for (String[] vendedora : vendedoras) {
             if (vendedora[0].equals(matricula)) {
                 vendedoraGlobal = vendedora[1];
-                Toast.makeText(getApplicationContext(), "Nombre de la vendedora: " + vendedoraGlobal, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Firma aceptada. Compañera: " + vendedoraGlobal, Toast.LENGTH_SHORT).show();
                 return vendedoraGlobal;
 
 
             }
         }
         Toast.makeText(getApplicationContext(), "Firma incorrecta, vuelve a intentarlo ", Toast.LENGTH_SHORT).show();
+
         return "Matrícula no encontrada";
     }
 
 
-    public boolean validarCamposNoVaciosYMostrarToast(Context context, String txtSucursal, String txtEquipo, String txtComentario,String txtFirma) {
+    public boolean validarCamposNoVaciosYMostrarToast(Context context, String validarSucursal, String validarEquipo, String validarComentario,String validarFirma) {
         List<String> camposVacios = new ArrayList<>();
 
-        if (txtSucursal == null || txtSucursal.trim().isEmpty() || txtSucursal.equals("Selecciona una sucursal")) {
+        if (validarSucursal == null || validarSucursal.trim().isEmpty() || validarSucursal.equals("Selecciona una sucursal")) {
             camposVacios.add("Sucursal");
         }
 
-        if (txtEquipo == null || txtEquipo.trim().isEmpty()) {
+        if (validarEquipo == null || validarEquipo.trim().isEmpty()) {
             camposVacios.add("Equipo");
         }
 
-        if (txtComentario == null || txtComentario.trim().isEmpty()) {
+        if (validarComentario == null || validarComentario.trim().isEmpty()) {
             camposVacios.add("Comentario");
         }
-        if (txtComentario == null || txtFirma.trim().isEmpty()) {
+        if (validarFirma == null || txtFirma.getText().toString() =="") {
             camposVacios.add("Firma");
         }
 
         if (!camposVacios.isEmpty()) {
-            String mensaje = "Los siguientes campos están vacíos:\n";
-            mensaje += TextUtils.join("\n", camposVacios);
-            Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(context, "Por favor, llena toda la informacion", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        CreatePDF(validarSucursal,validarEquipo,validarComentario,validarFirma);
         return true;
     }
+
+
+    public void LimpiarFormulario(){
+        // Limpiar EditText
+        txtFirma.setText("");
+        equipo.setText("");
+        comentario.setText("");
+
+// Limpiar Spinner
+        sucursal.setSelection(0); // Seleccionar el primer elemento (posición 0) en el Spinner
+
+    }
+
 
 }
