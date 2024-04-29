@@ -7,18 +7,64 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
+    <Spinner
+        android:id="@+id/spinner_basic"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textAlignment="center"
+        android:autofillHints="Sucursal"
+        android:spinnerMode="dialog"
+
+        />
+
+    <EditText
+        android:id="@+id/txtEquipo"
+        android:layout_width="346dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textAlignment="center"
+        android:hint="Equipo"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/txtComentario"
+        android:layout_width="344dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textAlignment="center"
+        android:hint="Descripcion del mantenimietno"
+        android:textSize="14dp" />
+    <EditText
+        android:id="@+id/txtFirma"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="14dp"
+        android:inputType="numberPassword"
+        android:textAlignment="center"
+        android:hint="Firma"
+        />
+
+
+    <Button
+        android:id="@+id/btnFirmar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Learn to create a pdf"
-       android:textSize="24sp"
-        android:textStyle="bold"
-       />
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="15dp"
+        android:text="Firmar reporte" />
 
     <Button
         android:id="@+id/btnCrearPdf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create PDF"/>
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp"
+        android:text="Generar reporte" />
 
 </LinearLayout>

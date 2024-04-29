@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Reportes</string>
+    <string name="spinner_hint">Selecciona una sucursal</string>
+    <string-array name="Sucursales">
+        <item>Acropolis</item>
+        <item>Adolfo</item>
+        <item>Alfredo</item>
+        <item>Aeropuerto</item>
+        <item>Calimaya</item>
+        <item>Carranza</item>
+        <item>Colon</item>
+        <item>Deportiva</item>
+        <item>Fabela</item>
+        <item>Lerma</item>
+        <item>Metepec</item>
+        <item>Mexicaltzingo</item>
+        <item>Moderna</item>
+        <item>Pino Suarez</item>
+        <item>Santin</item>
+        <item>Tecnologico</item>
+        <item>Torres</item>
+        <item>Xonacatlan</item>
+        <item>Ocoyoacac</item>
+        <item>Fogon</item>
+    </string-array>
+
+
 </resources>
