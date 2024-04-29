@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pantone_rosa">#da1984</color> <!-- Cambia "#00563F" por el valor hexadecimal del color Pantone verde que deseas utilizar -->
+
 </resources>

@@ -3,21 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="top|center_horizontal"
     android:orientation="vertical"
+    android:background="@color/pantone_rosa"
     tools:context=".MainActivity">
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comercializadora saron shekina S.A de C.V"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="17dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reportes de mantenimiento: Refrigeracion"
+        android:layout_marginBottom="80dp"
+        android:textAlignment="center"
+        android:textStyle="bold|italic"
+        android:textSize="15dp"
+        />
 
     <Spinner
         android:id="@+id/spinner_basic"
-        android:layout_width="345dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:textAlignment="center"
-        android:autofillHints="Sucursal"
         android:spinnerMode="dialog"
-
         />
+
+
 
     <EditText
         android:id="@+id/txtEquipo"
@@ -26,8 +47,12 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:textAlignment="center"
+        android:textStyle="bold"
         android:hint="Equipo"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+
+        />
+
 
     <EditText
         android:id="@+id/txtComentario"
@@ -35,9 +60,11 @@
         android:layout_height="154dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
-        android:textAlignment="center"
         android:hint="Descripcion del mantenimietno"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:textSize="14dp" />
+
     <EditText
         android:id="@+id/txtFirma"
         android:layout_width="170dp"
@@ -47,6 +74,7 @@
         android:textSize="14dp"
         android:inputType="numberPassword"
         android:textAlignment="center"
+        android:textStyle="bold"
         android:hint="Firma"
         />
 
@@ -66,5 +94,6 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="4dp"
         android:text="Generar reporte" />
+
 
 </LinearLayout>
