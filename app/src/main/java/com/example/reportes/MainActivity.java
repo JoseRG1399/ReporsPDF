@@ -3,6 +3,10 @@ package com.example.reportes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Context;
+import android.widget.Toast;
+
+
 import android.Manifest;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +15,7 @@ import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,28 +40,42 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
+ private static String vendedoraGlobal;
+    private static String sucursalGlobal;
+
+    private static String equipoGlobal;
+
+    private static String comentarioGlobal;
 
     final static int REQUEST_CODE = 1232;
     Button btnCrearPdf;
 
     Button btnFirmar;
-    EditText txtFirma;
+    EditText txtFirma,equipo,comentario;
+    Spinner sucursal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         askForPermissions();
-
         setupSpinnerBasic();
         btnFirmar = findViewById(R.id.btnFirmar);
         btnCrearPdf = findViewById(R.id.btnCrearPdf);
         txtFirma = findViewById(R.id.txtFirma);
+        comentario = findViewById(R.id.txtComentario);
+        equipo = findViewById(R.id.txtEquipo);
+        sucursal = findViewById(R.id.spinner_basic);
 
         btnCrearPdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreatePDF();
+                sucursalGlobal = sucursal.getSelectedItem().toString();
+                comentarioGlobal = comentario.getText().toString();
+                equipoGlobal = equipo.getText().toString();
+
+                validarCamposNoVaciosYMostrarToast(getApplicationContext(),sucursalGlobal,equipoGlobal,comentarioGlobal,vendedoraGlobal);
+
             }
         });
         btnFirmar.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     // El campo está vacío, puedes mostrar un mensaje al usuario o realizar otra acción
-                    Toast.makeText(getApplicationContext(), "Ingrese una firma", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Aun no ha ingresado una firma", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -225,23 +244,113 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static String obtenerNombreVendedora(String matricula) {
+    public String obtenerNombreVendedora(String matricula) {
         String[][] vendedoras = new String[][]{
                 {"1987", "DIANA ESTHELA"},
                 {"8809", "DORIS ALMANZA"},
                 {"6601", "MARY CASTRO"},
-                // Agrega el resto de las matrículas y nombres aquí
+                {"2281", "DIANA MOD"},
+                {"9562", "BEATRIZ NIETO"},
+                {"8802", "AGUSTINA"},
+                {"4403", "MA GUADALUPE VAZQUEZ"},
+                {"2204", "REYNA"},
+                {"2209", "IRENE"},
+                {"2213", "MARGARITA"},
+                {"2268", "MISAEL RAMIREZ"},
+                {"2246", "MARCELA VELEZ"},
+                {"2250", "MINERVA RAMIREZ"},
+                {"2260", "MONICA LOPEZ"},
+                {"2219", "MARIA DE LAS MERCEDES"},
+                {"2221", "DANIELA"},
+                {"2223", "JOSEFINA"},
+                {"2226", "MARIA CONCEPCION"},
+                {"2227", "DIANA GUADALUPE"},
+                {"2229", "SANTA"},
+                {"2231", "MARIA ADELAIDA"},
+                {"2232", "MARIA LUCIA"},
+                {"2234", "MARICELA"},
+                {"2237", "CLAUDIA"},
+                {"2240", "LETICIA"},
+                {"2244", "GUADALUPE"},
+                {"9996", "ELIZABETH RAMIREZ SALAS"},
+                {"2285", "Liliana Torres"},
+                {"2289", "ALEJANDRA MENDOZA"},
+                {"2292", "ZAIRA"},
+                {"010306", "DIANA DELGADO ESQUIVEL"},
+                {"0109", "Alma Rosa Mejia"},
+                {"1983", "NIDIA SALINAS"},
+                {"6521", "ABY RAMIREZ"},
+                {"35118", "Jazmin Gomez"},
+                {"35151", "Patricia Arriaga"},
+                {"35152", "Areli Araujo"},
+                {"35162", "Andy Mondragon"},
+                {"35163", "Supervisora Diana"},
+                {"35167", "Susana Silva"},
+                {"3472", "LIC. MISAEL RAMIREZ"},
+                {"1009", "Maripaz Mercado"},
+                {"020592", "JOSABETH POLO"},
+                {"151579", "Rosalba Carbajal"},
+                {"260818", "Sonia Nava"},
+                {"5436780", "Mariana Michell"},
+                {"131220", "MARICRUZ MAR"},
+                {"251014", "Guadalupe Palma"},
+                {"160515", "Carmen Cadena"},
+                {"140920", "Silvia Reyes"},
+                {"50105", "Wendolin Soto"},
+                {"35108", "Ciclalit Ruiz"},
+                {"35112", "Rocío Becerril"},
+                {"35113", "Silvia Reyes"},
+                {"35115", "Mayte Hernandez"},
+                {"35116", "Yadira Mata"},
+                {"35175", "Guadalupe Silva"},
+                {"35176", "Fatima Valera"},
+                {"35177", "JOSABETH POLO"},
+                {"35178", "Alma Gómez"},
+                {"351999", "SISTEMAS"},
+                {"35179", "DANIELA MERCADO"}
+
         };
 
         for (String[] vendedora : vendedoras) {
             if (vendedora[0].equals(matricula)) {
-                return vendedora[1];
+                vendedoraGlobal = vendedora[1];
+                Toast.makeText(getApplicationContext(), "Nombre de la vendedora: " + vendedoraGlobal, Toast.LENGTH_SHORT).show();
+                return vendedoraGlobal;
+
+
             }
         }
+        Toast.makeText(getApplicationContext(), "Firma incorrecta, vuelve a intentarlo ", Toast.LENGTH_SHORT).show();
         return "Matrícula no encontrada";
     }
 
 
+    public boolean validarCamposNoVaciosYMostrarToast(Context context, String txtSucursal, String txtEquipo, String txtComentario,String txtFirma) {
+        List<String> camposVacios = new ArrayList<>();
 
+        if (txtSucursal == null || txtSucursal.trim().isEmpty() || txtSucursal.equals("Selecciona una sucursal")) {
+            camposVacios.add("Sucursal");
+        }
+
+        if (txtEquipo == null || txtEquipo.trim().isEmpty()) {
+            camposVacios.add("Equipo");
+        }
+
+        if (txtComentario == null || txtComentario.trim().isEmpty()) {
+            camposVacios.add("Comentario");
+        }
+        if (txtComentario == null || txtFirma.trim().isEmpty()) {
+            camposVacios.add("Firma");
+        }
+
+        if (!camposVacios.isEmpty()) {
+            String mensaje = "Los siguientes campos están vacíos:\n";
+            mensaje += TextUtils.join("\n", camposVacios);
+            Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
 
 }
